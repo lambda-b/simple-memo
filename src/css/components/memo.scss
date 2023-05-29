@@ -1,0 +1,55 @@
+.right {
+  margin: auto 0.4em auto auto;
+}
+
+.title-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: baseline;
+}
+
+.input {
+  width: 250px;
+}
+
+.message {
+  margin-bottom: 16px;
+}
+
+.box {
+  user-select: none;
+  width: 400px;
+  height: 400px;
+  border-radius: 5px;
+
+  &-red {
+    background-color: rgba(255, 100, 120, 0.2);
+  }
+
+  &-yellow {
+    background-color: rgba(255, 255, 128, 0.4);
+  }
+}
+
+.card {
+  height: 100%;
+
+  &-content {
+    height: 100%;
+  }
+}
+
+.textarea {
+  height: 75%;
+}
+
+.delete {
+  &:hover {
+    background-color: rgb(255, 56, 96);
+  }
+
+  &:focus {
+    background-color: rgb(255, 56, 96);
+  }
+}

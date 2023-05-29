@@ -1,0 +1,25 @@
+.main {
+  margin-top: 100px;
+}
+
+.flex-ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.empty-item {
+  display: block;
+  content: "";
+  width: 400px;
+  margin: 0.5em 0.5em auto 0.5em;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.5em 0.5em auto 0.5em;
+}
