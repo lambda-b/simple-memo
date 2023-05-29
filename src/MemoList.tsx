@@ -1,4 +1,5 @@
 import { MemoCard } from "@/components/MemoCard";
+import { validate } from "@/func/validation";
 import { Memo } from "@/model/Model";
 import ky from 'ky';
 import { useEffect, useState } from "react";
@@ -41,6 +42,10 @@ export const MemoList = () => {
   };
 
   const udpate = async () => {
+    if (memos.some(memo => !validate(memo.title, memo.content))) {
+      alert("不適なメモがあります.");
+      return;
+    }
     await register("save-memos", memos);
     await reload("memos", setMemos);
   };

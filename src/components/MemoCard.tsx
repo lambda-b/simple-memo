@@ -1,18 +1,9 @@
 import { MemoContent } from "@/components/atom/MemoContent";
 import { MemoTitle } from "@/components/atom/MemoTitle";
+import { validate } from "@/func/validation";
 import { Memo } from "@/model/Model";
 import { ClassNamesArg, cx } from "@emotion/css";
 import { useEffect, useState } from "react";
-
-const validate = (title: string, content: string) => {
-  if (title === "" || title.length > 20) {
-    return false;
-  }
-  if (content.length > 140) {
-    return false;
-  }
-  return true;
-};
 
 const boxColor = (title: string, content: string, isSaved: boolean) => {
   if (!validate(title, content)) {
