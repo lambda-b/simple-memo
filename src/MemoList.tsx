@@ -1,8 +1,9 @@
 import { MemoCard } from "@/components/MemoCard";
 import { validate } from "@/func/validation";
+import { useDragSort } from "@/hooks/useDragSort";
 import { Memo } from "@/model/Model";
 import ky from 'ky';
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const api = ky.create({ prefixUrl: "http://localhost:8080/api" });
 
@@ -26,7 +27,7 @@ const post = async <T,>(path: string, data: T) => {
 };
 
 export const MemoList = () => {
-  const [memos, setMemos] = useState<Memo[]>([]);
+  const [memos, setMemos] = useDragSort<Memo>([]);
 
   const addMemo = () => {
     const newMemo = {
@@ -35,11 +36,11 @@ export const MemoList = () => {
       content: "",
       isSaved: false,
     };
-    setMemos([...memos, newMemo]);
+    setMemos([...memos.map(memo => memo.value), newMemo]);
   };
 
   const clearMemo = (index: number) => {
-    setMemos(memos.filter((_, i) => i !== index));
+    setMemos(memos.filter((_, i) => i !== index).map(memo => memo.value));
   };
 
   const reload = async () => {
@@ -53,7 +54,7 @@ export const MemoList = () => {
   }
 
   const udpate = async () => {
-    if (memos.some(memo => !validate(memo.title, memo.content))) {
+    if (memos.some(memo => !validate(memo.value.title, memo.value.content))) {
       alert("不適なメモがあります.");
       return;
     }
@@ -77,9 +78,9 @@ export const MemoList = () => {
               clearMemo(i);
             };
             return (
-              <li className="flex-col" key={i}>
+              <li className="flex-col" key={memo.key} {...memo.events} >
                 <MemoCard
-                  memo={memo}
+                  memo={memo.value}
                   sequence={i}
                   clear={clear}
                 />
