@@ -3,7 +3,7 @@ import { validate } from "@/func/validation";
 import { useDragSort } from "@/hooks/useDragSort";
 import { Memo } from "@/model/Model";
 import ky from 'ky';
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 const api = ky.create({ prefixUrl: "http://localhost:8080/api" });
 
@@ -43,7 +43,7 @@ export const MemoList = () => {
     setMemos(memos.filter((_, i) => i !== index).map(memo => memo.value));
   };
 
-  const reload = async () => {
+  const reload = useCallback(async () => {
     const dbMemos = await get<Omit<Memo, 'isSaved'>[]>("memos");
     setMemos(dbMemos?.map(memo => {
       return {
@@ -51,7 +51,7 @@ export const MemoList = () => {
         isSaved: true,
       }
     }) ?? []);
-  }
+  }, [setMemos]);
 
   const udpate = async () => {
     if (memos.some(memo => !validate(memo.value.title, memo.value.content))) {
@@ -64,7 +64,7 @@ export const MemoList = () => {
 
   useEffect(() => {
     reload();
-  }, [setMemos]);
+  }, [reload]);
 
   return (
     <section>
