@@ -39,7 +39,7 @@ export const MemoCard = ({
   useEffect(() => {
     setTitle(memo.title);
     setContent(memo.content);
-    setIsSaved(!!memo.memoId && isSaved);
+    setIsSaved(memo.isSaved);
   }, [memo]);
 
   /**
@@ -48,6 +48,7 @@ export const MemoCard = ({
    */
   const handleChangeTitle = (param: string) => {
     memo.title = param;
+    memo.isSaved = false;
     setTitle(param);
     setIsSaved(false);
   };
@@ -58,6 +59,7 @@ export const MemoCard = ({
    */
   const handleChangeContent = (param: string) => {
     memo.content = param;
+    memo.isSaved = false;
     setContent(param);
     setIsSaved(false);
   };

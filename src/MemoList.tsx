@@ -6,16 +6,16 @@ import { useEffect, useState } from "react";
 
 const api = ky.create({ prefixUrl: "http://localhost:8080/api" });
 
-const reload = async <T,>(path: string, callback: (param: T) => void) => {
+const get = async <T,>(path: string) => {
   try {
-    const data: T = await api.get(path).json();
-    callback(data);
+    const data = await api.get(path).json<T>();
+    return data;
   } catch (error) {
     console.error(error);
   }
 };
 
-const register = async <T,>(path: string, data: T) => {
+const post = async <T,>(path: string, data: T) => {
   try {
     await api.post(path, {
       json: data,
@@ -33,6 +33,7 @@ export const MemoList = () => {
       memoId: "",
       title: "無題",
       content: "",
+      isSaved: false,
     };
     setMemos([...memos, newMemo]);
   };
@@ -41,23 +42,33 @@ export const MemoList = () => {
     setMemos(memos.filter((_, i) => i !== index));
   };
 
+  const reload = async () => {
+    const dbMemos = await get<Omit<Memo, 'isSaved'>[]>("memos");
+    setMemos(dbMemos?.map(memo => {
+      return {
+        ...memo,
+        isSaved: true,
+      }
+    }) ?? []);
+  }
+
   const udpate = async () => {
     if (memos.some(memo => !validate(memo.title, memo.content))) {
       alert("不適なメモがあります.");
       return;
     }
-    await register("save-memos", memos);
-    await reload("memos", setMemos);
+    await post("save-memos", memos);
+    await reload();
   };
 
   useEffect(() => {
-    reload("memos", setMemos);
+    reload();
   }, [setMemos]);
 
   return (
     <section>
       <button className="button" onClick={addMemo}>追加</button>
-      <button className="button" onClick={() => reload("memos", setMemos)}>キャンセル</button>
+      <button className="button" onClick={reload}>キャンセル</button>
       <button className="button is-primary" onClick={udpate}>登録</button>
       <div className="main">
         <ul className="flex-ul">
