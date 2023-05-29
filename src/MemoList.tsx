@@ -36,11 +36,11 @@ export const MemoList = () => {
       content: "",
       isSaved: false,
     };
-    setMemos([...memos.map(memo => memo.value), newMemo]);
+    setMemos([...memos, newMemo]);
   };
 
   const clearMemo = (index: number) => {
-    setMemos(memos.filter((_, i) => i !== index).map(memo => memo.value));
+    setMemos(memos.filter((_, i) => i !== index));
   };
 
   const reload = useCallback(async () => {
@@ -54,7 +54,7 @@ export const MemoList = () => {
   }, [setMemos]);
 
   const udpate = async () => {
-    if (memos.some(memo => !validate(memo.value.title, memo.value.content))) {
+    if (memos.some(memo => !validate(memo.title, memo.content))) {
       alert("不適なメモがあります.");
       return;
     }
@@ -80,7 +80,7 @@ export const MemoList = () => {
             return (
               <li className="flex-col" key={memo.key} {...memo.events} >
                 <MemoCard
-                  memo={memo.value}
+                  memo={memo}
                   sequence={i}
                   clear={clear}
                 />

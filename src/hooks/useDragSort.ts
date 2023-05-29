@@ -51,14 +51,13 @@ const isHover = (event: MouseEvent, element: HTMLElement) => {
 /**
  * 返り値の型
  */
-export interface DragSortResult<T> {
+export type DragSortResult<T> = T & {
   key: string;
-  value: T;
   events: {
     ref: (element: HTMLElement | null) => void;
     onMouseDown: (event: React.MouseEvent<HTMLElement>) => void;
   };
-}
+};
 
 /**
  * hooks
@@ -174,7 +173,7 @@ export const useDragSort = <T>(
       state.keys.set(value, key);
 
       return {
-        value,
+        ...value,
         key,
         events: {
           ref: (element: HTMLElement | null) => {
