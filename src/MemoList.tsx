@@ -1,9 +1,8 @@
 import { MemoCard } from "@/components/MemoCard";
 import { validate } from "@/func/validation";
-import { useDragSort } from "@/hooks/useDragSort";
 import { Memo } from "@/model/Model";
 import ky from 'ky';
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const api = ky.create({ prefixUrl: "http://localhost:8080/api" });
 
@@ -27,7 +26,7 @@ const post = async <T,>(path: string, data: T) => {
 };
 
 export const MemoList = () => {
-  const [memos, setMemos] = useDragSort<Memo>([]);
+  const [memos, setMemos] = useState<Memo[]>([]);
 
   const addMemo = () => {
     const newMemo = {
@@ -78,7 +77,7 @@ export const MemoList = () => {
               clearMemo(i);
             };
             return (
-              <li className="flex-col" key={memo.key} {...memo.events} >
+              <li className="flex-col" key={i} >
                 <MemoCard
                   memo={memo}
                   sequence={i}
