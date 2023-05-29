@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 
 /**
  * 座標を表す
@@ -159,11 +159,11 @@ export const useDragSort = <T>(
     window.removeEventListener("mousemove", onMouseMove);
   };
 
-  const setItemsAndDragsclear = (inputItems: T[]) => {
+  const setItemsAndDragsclear = useCallback((inputItems: T[]) => {
     setItems(inputItems);
     const { dragItems } = state;
     dragItems.splice(0);
-  }
+  }, [state]);
 
   return [
     items.map(value => {
