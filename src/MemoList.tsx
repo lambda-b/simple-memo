@@ -57,7 +57,7 @@ export const MemoList = () => {
       alert("不適なメモがあります.");
       return;
     }
-    await post("save-memos", memos);
+    await post("save-memos", memos.filter(memo => memo.content !== ""));
     await reload();
   };
 
