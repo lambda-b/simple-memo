@@ -29,9 +29,9 @@ export const MemoCard = ({
   clear,
 }: MemoCardProps) => {
 
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
-  const [isSaved, setIsSaved] = useState<boolean>(true);
+  const [title, setTitle] = useState<string>(memo.title);
+  const [content, setContent] = useState<string>(memo.content);
+  const [isSaved, setIsSaved] = useState<boolean>(memo.isSaved);
 
   /**
    * メモが変わったときの初期描画

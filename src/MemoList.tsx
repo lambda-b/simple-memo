@@ -1,8 +1,9 @@
 import { MemoCard } from "@/components/MemoCard";
 import { validate } from "@/func/validation";
+import { useDragSort } from "@/hooks/useDragSort";
 import { Memo } from "@/model/Model";
 import ky from 'ky';
-import { useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 
 const api = ky.create({ prefixUrl: "http://localhost:8080/api" });
 
@@ -26,7 +27,7 @@ const post = async <T,>(path: string, data: T) => {
 };
 
 export const MemoList = () => {
-  const [memos, setMemos] = useState<Memo[]>([]);
+  const [memos, setMemos] = useDragSort<Memo>([]);
 
   const addMemo = () => {
     const newMemo = {
@@ -42,7 +43,7 @@ export const MemoList = () => {
     setMemos(memos.filter((_, i) => i !== index));
   };
 
-  const reload = async () => {
+  const reload = useCallback(async () => {
     const dbMemos = await get<Omit<Memo, 'isSaved'>[]>("memos");
     setMemos(dbMemos?.map(memo => {
       return {
@@ -50,7 +51,7 @@ export const MemoList = () => {
         isSaved: true,
       }
     }) ?? []);
-  }
+  }, [setMemos]);
 
   const udpate = async () => {
     if (memos.some(memo => !validate(memo.title, memo.content))) {
@@ -63,7 +64,7 @@ export const MemoList = () => {
 
   useEffect(() => {
     reload();
-  }, [setMemos]);
+  }, [reload]);
 
   return (
     <section>
@@ -77,7 +78,7 @@ export const MemoList = () => {
               clearMemo(i);
             };
             return (
-              <li className="flex-col" key={i}>
+              <li className="flex-col" key={memo.key} {...memo.events} >
                 <MemoCard
                   memo={memo}
                   sequence={i}
