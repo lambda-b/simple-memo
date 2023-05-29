@@ -49,6 +49,7 @@ export const MemoCard = ({
   const handleChangeTitle = (param: string) => {
     memo.title = param;
     setTitle(param);
+    setIsSaved(false);
   };
 
   /**
@@ -58,6 +59,7 @@ export const MemoCard = ({
   const handleChangeContent = (param: string) => {
     memo.content = param;
     setContent(param);
+    setIsSaved(false);
   };
 
   return (
