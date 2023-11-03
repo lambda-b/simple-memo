@@ -1,9 +1,14 @@
 import { MemoCard } from "@/components/MemoCard";
+import { WebSocketPublish } from "@/components/WebSocketPublish";
+import { WebSocketSubscription } from "@/components/WebSocketSubscription";
 import { validate } from "@/func/validation";
 import { useDragSort } from "@/hooks/useDragSort";
 import { Memo } from "@/model/Model";
 import ky from 'ky';
 import { useCallback, useEffect } from "react";
+import {
+  StompSessionProvider
+} from "react-stomp-hooks";
 
 const api = ky.create({ prefixUrl: "http://localhost:8080/api" });
 
@@ -68,6 +73,12 @@ export const MemoList = () => {
 
   return (
     <section>
+      <StompSessionProvider
+        url={"http://localhost:8080/websocket"}
+      >
+        <WebSocketPublish />
+        <WebSocketSubscription />
+      </StompSessionProvider>
       <button className="button" onClick={addMemo}>追加</button>
       <button className="button" onClick={reload}>キャンセル</button>
       <button className="button is-primary" onClick={udpate}>登録</button>
