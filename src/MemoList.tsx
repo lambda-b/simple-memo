@@ -1,35 +1,11 @@
 import { MemoCard } from "@/components/MemoCard";
 import { WebSocketPublish } from "@/components/WebSocketPublish";
 import { WebSocketSubscription } from "@/components/WebSocketSubscription";
+import { client } from "@/connection/WebConnection";
 import { validate } from "@/func/validation";
 import { useDragSort } from "@/hooks/useDragSort";
 import { Memo } from "@/model/Model";
-import ky from 'ky';
 import { useCallback, useEffect } from "react";
-import {
-  StompSessionProvider
-} from "react-stomp-hooks";
-
-const api = ky.create({ prefixUrl: "http://localhost:8080/api" });
-
-const get = async <T,>(path: string) => {
-  try {
-    const data = await api.get(path).json<T>();
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const post = async <T,>(path: string, data: T) => {
-  try {
-    await api.post(path, {
-      json: data,
-    });
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 export const MemoList = () => {
   const [memos, setMemos] = useDragSort<Memo>([]);
@@ -49,7 +25,7 @@ export const MemoList = () => {
   };
 
   const reload = useCallback(async () => {
-    const dbMemos = await get<Omit<Memo, 'isSaved'>[]>("memos");
+    const dbMemos = await client.get<Omit<Memo, 'isSaved'>[]>("memos");
     setMemos(dbMemos?.map(memo => {
       return {
         ...memo,
@@ -63,7 +39,7 @@ export const MemoList = () => {
       alert("不適なメモがあります.");
       return;
     }
-    await post("save-memos", memos.filter(memo => memo.content !== ""));
+    await client.post("save-memos", memos.filter(memo => memo.content !== ""));
     await reload();
   };
 
@@ -73,12 +49,8 @@ export const MemoList = () => {
 
   return (
     <section>
-      <StompSessionProvider
-        url={"http://localhost:8080/websocket"}
-      >
-        <WebSocketPublish />
-        <WebSocketSubscription />
-      </StompSessionProvider>
+      <WebSocketPublish />
+      <WebSocketSubscription />
       <button className="button" onClick={addMemo}>追加</button>
       <button className="button" onClick={reload}>キャンセル</button>
       <button className="button is-primary" onClick={udpate}>登録</button>
