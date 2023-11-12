@@ -7,10 +7,15 @@ export const NavigationHeader = () => {
 
   return <div>
     <h1 className="title">メモ帳</h1>
-    <div className="flex flex-middle">
-      <button className="button" onClick={() => navigate("/memos")}>
-        <FontAwesomeIcon icon={["fas", "sticky-note"]} />
-      </button>
+    <div className="tabs">
+      <ul>
+        <li>
+          <a onClick={() => navigate("/memos")}>
+            メモリスト
+            <FontAwesomeIcon icon={["fas", "sticky-note"]} />
+          </a>
+        </li>
+      </ul>
     </div>
   </div>;
 };
