@@ -47,34 +47,32 @@ export const MemoList = () => {
     reload();
   }, [reload]);
 
-  return (
-    <section>
-      <WebSocketPublish />
-      <WebSocketSubscription />
+  return <>
+    <WebSocketPublish />
+    <WebSocketSubscription />
+    <div>
       <button className="button" onClick={addMemo}>追加</button>
       <button className="button" onClick={reload}>キャンセル</button>
       <button className="button is-primary" onClick={udpate}>登録</button>
-      <div className="main">
-        <ul className="flex-ul">
-          {memos.map((memo, i) => {
-            const clear = () => {
-              clearMemo(i);
-            };
-            return (
-              <li className="flex-col" key={memo.key} {...memo.events} >
-                <MemoCard
-                  memo={memo}
-                  sequence={i}
-                  clear={clear}
-                />
-              </li>
-            );
-          })}
-          {[...Array(20)].map((_, index) => ( // 適当に隙間を埋める
-            <li className="empty-item" key={index} />
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
+      <ul className="flex-ul">
+        {memos.map((memo, i) => {
+          const clear = () => {
+            clearMemo(i);
+          };
+          return (
+            <li className="flex-col" key={memo.key} {...memo.events} >
+              <MemoCard
+                memo={memo}
+                sequence={i}
+                clear={clear}
+              />
+            </li>
+          );
+        })}
+        {[...Array(20)].map((_, index) => ( // 適当に隙間を埋める
+          <li className="empty-item" key={index} />
+        ))}
+      </ul>
+    </div>
+  </>;
 };

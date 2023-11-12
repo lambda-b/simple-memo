@@ -7,10 +7,10 @@ import { useEffect, useState } from "react";
 
 const boxColor = (title: string, content: string, isSaved: boolean) => {
   if (!validate(title, content)) {
-    return "box-red";
+    return "memo-box-red";
   }
   if (!isSaved) {
-    return "box-yellow";
+    return "memo-box-yellow";
   }
   return "";
 }
@@ -65,7 +65,7 @@ export const MemoCard = ({
   };
 
   return (
-    <div className={cx("box", boxColor(title, content, isSaved), className)}>
+    <div className={cx("box", "memo-box", boxColor(title, content, isSaved), className)}>
       <div className="card">
         <MemoTitle
           isChangeable={!memo.memoId}

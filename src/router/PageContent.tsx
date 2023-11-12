@@ -5,12 +5,12 @@ import { Route, Routes } from "react-router-dom";
 
 
 const PageContent = () => {
-  return (
+  return <section className="main">
     <Routes>
       <Route path={RoutingPath.memoList} element={<MemoList />} />
       <Route path={RoutingPath.communication} element={<Communication />} />
     </Routes>
-  )
+  </section>;
 };
 
 export default PageContent;
