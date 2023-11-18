@@ -4,3 +4,9 @@ export interface Memo {
   content: string;
   isSaved: boolean;
 }
+
+export interface ShareMessage {
+  messageId?: string;
+  sender: string;
+  content: string;
+}
